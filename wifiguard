@@ -1,0 +1,35 @@
+#!/bin/bash
+
+url="www.qq.com"
+period=180
+#url="192.168.3.19"
+
+sleep $period
+
+while [ 1 -eq 1 ]
+do
+	count=0
+	errcount=0
+	while [ $count -lt 3 ]
+	do
+		count=`expr $count + 1`
+		curl $url > /dev/null 2> /dev/null
+		if [ $? -ne 0 ]; then
+			errcount=`expr $errcount + 1`
+        		echo "[error] `date`" >> wifiguard.log
+		else
+        		echo "[success] `date`" >> wifiguard.log
+		fi
+		sleep 1
+	done
+	if [ $errcount -eq 3 ];then
+		echo "[reboot] `date`" >> wifiguard.log
+		reboot
+	fi
+	sleep $period
+done
+
+
+
+
+
